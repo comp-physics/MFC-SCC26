@@ -12,6 +12,7 @@ from typing import Callable, List, Optional, Set, Union
 from .. import case, common
 from ..build import SIMULATION, MFCTarget, get_target
 from ..run import input
+from ..scc import core as scc_core
 from ..state import ARG
 
 # Parameters that enable simulation output writing for post_process.
@@ -192,7 +193,9 @@ class TestCase(case.Case):
         command = [mfc_script, "run", filepath, "--no-build", *tasks, *case_optimization, *jobs, "-t", *target_names, *gpus_select, *ARG("--")]
 
         # env is per-subprocess, never os.environ: cases run in worker threads,
-        # so a mutated global would leak into every concurrent case.
+        # so a mutated global would leak into every concurrent case. Test runs
+        # are not competition runs, so they skip the SCC fingerprint.
+        env = {**(os.environ if env is None else env), scc_core.SKIP_ENV: "1"}
         return common.system(command, print_cmd=False, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=env)
 
     def run_restart(self, targets, gpus, env: dict = None):

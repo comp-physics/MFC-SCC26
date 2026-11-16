@@ -103,6 +103,12 @@ END
         exit 1
     fi
 
+% if target == SIMULATION:
+    "${MFC_ROOT_DIR}/build/venv/bin/python3" "${MFC_ROOT_DIR}/toolchain/mfc/scc/seal.py" '${os.path.dirname(input)}' \
+        --start "$t_${target.name}_start" --stop "$t_${target.name}_stop" --exe '${target.get_install_binpath(case)}' \
+        || error "Fingerprint: could not seal this run's results."
+% endif
+
     % if output_summary:
 
         cd '${MFC_ROOT_DIR}'

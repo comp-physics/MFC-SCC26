@@ -1,0 +1,5 @@
+# Problem 0 deliverables: deliverables_<team#>/problem0/configuration<#>/ must contain exactly
+# these files. One glob per line; {dir} is the configuration directory's name.
+{dir}.diff
+{dir}_gpu.log
+{dir}_cpu.log

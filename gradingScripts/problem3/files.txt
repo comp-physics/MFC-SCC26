@@ -1,0 +1,8 @@
+# Problem 3 deliverables: each deliverables_<team#>/problem3/convergence_N<resolution>/ must
+# contain exactly these entries. One glob per line; a trailing / means a directory.
+case.py
+mfc_log.txt
+options.txt
+mfc_fingerprint.log
+# Final time step only: restart_data/ with parallel I/O, p_all/ with serial I/O.
+@(restart_data|p_all)/
