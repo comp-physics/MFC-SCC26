@@ -21,11 +21,12 @@ parser.add_argument(
     help="Strong scaling keeps the problem at N^3 cells; weak scaling grows it with the number of devices.",
 )
 parser.add_argument("--serial-io", action="store_true", help="Write output with serial I/O instead of parallel I/O.")
+parser.add_argument("--rdma", action="store_true", help="Use GPU-direct (RDMA) MPI; needs a GPU-aware MPI library.")
 args = parser.parse_args()
 
 # Record the effective options next to this case file.
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "options.txt"), "w") as f:
-    f.write(f"--resolution {args.resolution}\n--scaling {args.scaling}\n--serial-io {args.serial_io}\n")
+    f.write(f"--resolution {args.resolution}\n--scaling {args.scaling}\n--serial-io {args.serial_io}\n--rdma {args.rdma}\n")
 
 
 def closest_three_factors(n):
@@ -82,7 +83,7 @@ print(
         {
             # Logistics
             "run_time_info": "F", # Off to avoid reductions
-            "rdma_mpi": "F", # Enable if you think GPU direct MPI will work...
+            "rdma_mpi": "T" if args.rdma else "F",
             # Computational Domain Parameters
             "x_domain%beg": -Lx * math.pi * L,
             "x_domain%end": Lx * math.pi * L,
